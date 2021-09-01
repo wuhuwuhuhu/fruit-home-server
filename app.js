@@ -1,6 +1,15 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
+const fs = require('fs');
+const https = require('https');
+const key = fs.readFileSync('wuhd.site.key');
+const cert = fs.readFileSync('wuhd.site.crt');
+
+const options = {
+	key: key,
+	cert: cert,
+};
 
 app.get('/', function (req, res) {
 	res.send('Hello World!');
@@ -16,6 +25,7 @@ app.get('/picture_list', async (req, res) => {
 		console.log(e);
 		throw `Error: wrong path`;
 	}
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.json(data_parsed);
 });
 
@@ -30,13 +40,11 @@ app.get('/fruit/:key', async (req, res) => {
 		console.log(e);
 		throw `Error: wrong path`;
 	}
-	console.log(data_parsed);
+	console.log(req);
+	console.log(`requested at ${new Date().toLocaleString()} from `);
+	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.json(data_parsed);
 });
 
-let server = app.listen(4000, function () {
-	let host = server.address().address;
-	let port = server.address().port;
-
-	console.log('Example app listening at http://%s:%s', host, port);
-});
+https.createServer(options, app).listen(4000);
+console.log('server running on port 4000');
