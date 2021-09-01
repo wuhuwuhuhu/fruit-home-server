@@ -40,8 +40,7 @@ app.get('/fruit/:key', async (req, res) => {
 		console.log(e);
 		throw `Error: wrong path`;
 	}
-	console.log(req);
-	console.log(`requested at ${new Date().toLocaleString()} from `);
+	console.log(`requested at ${new Date().toLocaleString()}`);
 	res.setHeader('Access-Control-Allow-Origin', '*');
 	res.json(data_parsed);
 });
